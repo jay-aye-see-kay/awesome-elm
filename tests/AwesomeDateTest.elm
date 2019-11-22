@@ -10,6 +10,27 @@ exampleDate =
     Date.create 2012 6 2
 
 
+leapDate : Date
+leapDate =
+    Date.create 2012 2 29
+
+
+expectDate : Int -> Int -> Int -> Date -> Expect.Expectation
+expectDate year month day actualDate =
+    let
+        expectedDate =
+            Date.create year month day
+    in
+    if actualDate == expectedDate then
+        Expect.pass
+
+    else
+        Expect.fail <|
+            Date.toDateString actualDate
+                ++ "\n╷\n│expectDate\n╵\n"
+                ++ Date.toDateString expectedDate
+
+
 testDateParts : Test
 testDateParts =
     describe "date part getters"
@@ -52,9 +73,26 @@ testIsLeapYear =
         ]
 
 
+testAddYears : Test
+testAddYears =
+    describe "addYears"
+        [ test "change a date's year"
+            (\() ->
+                Date.addYears 2 exampleDate
+                    |> expectDate 2014 6 2
+            )
+        , test "prevent leap days on non-leap years"
+            (\() ->
+                Date.addYears 1 leapDate
+                    |> expectDate 2013 2 28
+            )
+        ]
+
+
 suite : Test
 suite =
     describe "AwesomeDate"
         [ testDateParts
         , testIsLeapYear
+        , testAddYears
         ]
