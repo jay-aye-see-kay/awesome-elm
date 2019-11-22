@@ -1,4 +1,4 @@
-module AwesomeDate exposing (Date, create, day, month, year)
+module AwesomeDate exposing (Date, create, day, isLeapYear, month, year)
 
 
 type Date
@@ -23,3 +23,12 @@ month (Date date) =
 day : Date -> Int
 day (Date date) =
     date.day
+
+
+isLeapYear : Int -> Bool
+isLeapYear year_ =
+    let
+        isDivisbleBy n =
+            remainderBy n year_ == 0
+    in
+    isDivisbleBy 4 && not (isDivisbleBy 100) || isDivisbleBy 400
